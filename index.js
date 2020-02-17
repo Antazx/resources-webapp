@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import path from 'path';
@@ -18,6 +18,11 @@ app.get('/', (request, response) => {
   response.send(`<h1>Hello world</h1>`);
 });
 
+app.post('/login', (request, response) => {
+  console.log(request);
+  return response.status(200);
+});
+
 // Vue.js specific middleware
 import history from 'connect-history-api-fallback';
 app.use(history());
@@ -25,5 +30,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || devPort);
 app.listen(app.get('port'), () => {
-  console.log(`Server schema working on ${app.get('port')}`);
+  console.log(`Server schema working on http://localhost:${app.get('port')}`);
 });
