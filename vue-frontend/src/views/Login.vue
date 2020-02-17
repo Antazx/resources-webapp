@@ -64,7 +64,14 @@ export default {
         .post('/login', this.user)
         .then((res) => console.log(res))
         .catch((e) => console.log(e));
-      this.loading = false;
+      //this.loading = false;
+    }
+  },
+  watch: {
+    loading(val) {
+      if (!val) return;
+
+      setTimeout(() => (this.loading = false), 3000);
     }
   }
 };
