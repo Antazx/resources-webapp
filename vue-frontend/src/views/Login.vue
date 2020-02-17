@@ -60,15 +60,10 @@ export default {
   methods: {
     login() {
       this.loading = true;
-      /* this.axios
+      this.axios
         .post('/login', this.user)
         .then((res) => console.log(res))
-        .catch((e) => console.log(e)); */
-      this.axios
-        .get('/')
-        .then((res) => console.log(res))
         .catch((e) => console.log(e));
-
       this.loading = false;
     }
   }

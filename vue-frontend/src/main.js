@@ -7,9 +7,9 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import '@babel/polyfill';
 
-Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;
-axios.defaults.baseURL = 'https://localhost:3000';
+Vue.use(VueAxios, axios);
+axios.defaults.baseURL = 'http://localhost:3000';
 
 new Vue({
   router,
