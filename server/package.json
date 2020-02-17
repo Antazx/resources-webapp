@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "dev": "nodemon index.js --exec babel-node",
-    "start": "babel-node app.js --exec"
+    "start": "babel-node index.js --exec"
   },
   "author": "Guillermo Anta Alonso",
   "license": "ISC",
