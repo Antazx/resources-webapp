@@ -8,7 +8,7 @@
             <v-spacer />
           </v-toolbar>
           <v-card-text>
-            <v-form>
+            <v-form @submit.prevent="login" ref="form" id="login-form">
               <v-text-field
                 v-model="user.name"
                 :rules="usernameRules"
@@ -31,7 +31,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn class="mb-1" color="primary" block @click="login()">Login</v-btn>
+            <v-btn class="mb-1" color="primary" block type="submit" form="login-form">Login</v-btn>
           </v-card-actions>
           <v-progress-linear
             :active="loading"
@@ -51,26 +51,26 @@ export default {
   data: () => ({
     user: { name: '', password: '' },
     usernameRules: [
-      (v) => !!v || 'Name is required',
-      (v) => v.length <= 10 || 'Name must be less than 10 characters'
+      v => !!v || 'Name is required',
+      v => v.length <= 10 || 'Name must be less than 10 characters'
     ],
-    passwordRules: [(v) => !!v || 'Password is required'],
+    passwordRules: [v => !!v || 'Password is required'],
     loading: false
   }),
   methods: {
     login() {
+      if (!this.$refs.form.validate()) return;
       this.loading = true;
       this.axios
         .post('/login', this.user)
-        .then((res) => console.log(res))
-        .catch((e) => console.log(e));
+        .then(res => console.log(res))
+        .catch(e => console.log(e));
       //this.loading = false;
     }
   },
   watch: {
     loading(val) {
       if (!val) return;
-
       setTimeout(() => (this.loading = false), 3000);
     }
   }
