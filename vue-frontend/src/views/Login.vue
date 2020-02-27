@@ -1,10 +1,10 @@
 <template>
   <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center">
+    <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="5" xl="4">
-        <v-card class="elevation-12">
+        <v-card>
           <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Login form</v-toolbar-title>
+            <v-toolbar-title color="error">Login form</v-toolbar-title>
             <v-spacer />
           </v-toolbar>
           <v-card-text>
@@ -17,6 +17,7 @@
                 prepend-icon="mdi-account"
                 type="text"
                 required
+                clearable
               />
 
               <v-text-field
@@ -27,6 +28,7 @@
                 prepend-icon="mdi-lock"
                 type="password"
                 required
+                clearable
               />
             </v-form>
           </v-card-text>
@@ -43,6 +45,13 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row justify="center">
+      <v-col cols="12" sm="9" md="8" lg="7" xl="6">
+        <v-alert v-show="showError" type="error" dense>
+          {{ errorMsg }}
+        </v-alert>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -52,19 +61,31 @@ export default {
     user: { name: '', password: '' },
     usernameRules: [
       v => !!v || 'Name is required',
-      v => v.length <= 10 || 'Name must be less than 10 characters'
+      v => /.+@.+\..+/.test(v) || 'Login must be a valid E-mail'
     ],
     passwordRules: [v => !!v || 'Password is required'],
-    loading: false
+    loading: false,
+    errorMsg: '',
+    showError: false
   }),
   methods: {
     login() {
+      this.showError = false;
       if (!this.$refs.form.validate()) return;
       this.loading = true;
       this.axios
         .post('/login', this.user)
-        .then(res => console.log(res))
-        .catch(e => console.log(e));
+        .then(res => {
+          console.log(res);
+          if (res.data.accessToken)
+            this.axios.defaults.headers.common['x-access-token'] = res.data.accessToken;
+        })
+        .catch(e => {
+          console.log(e);
+          this.errorMsg = 'Incorrect username or password';
+          this.showError = true;
+        });
+
       //this.loading = false;
     }
   },

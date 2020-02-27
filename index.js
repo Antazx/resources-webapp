@@ -51,6 +51,13 @@ app.use(async (req, res, next) => {
 
 app.use('/', userRoutes);
 
+//Simple error handling
+app.use((err, req, res) => {
+  console.error('SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS');
+  if (!err.statusCode) err.statusCode = 500;
+  res.status(err.statusCode).send(err.message);
+});
+
 // Vue.js specific middleware
 import history from 'connect-history-api-fallback';
 app.use(history());

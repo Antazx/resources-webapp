@@ -31,10 +31,21 @@ const login = async (req, res, next) => {
   try {
     const { name, password } = req.body;
     const user = await User.findOne({ name });
-    if (!user) return next(new Error('There is no user with that username'));
+    if (!user) {
+      let error = new Error('There is no user with that username');
+      error.statusCode = 401;
+      error.message = 'There is no user with that username';
+      console.log(error);
+      return next(error);
+    }
     console.log(password + ' ' + user.password);
     const validPassword = await validatePassword(password, user.password);
-    if (!validPassword) return next(new Error('Password is not correct'));
+    if (!validPassword) {
+      let error = new Error('Password is not correct');
+      error.message = 'Password is not correct';
+      error.statusCode;
+      return next(error);
+    }
     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1d'
     });
